@@ -8,9 +8,16 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// ---------- GET ----------
+// USER ENDPOINTS
 
-// REVIEWSERVICE
+// RECOMMENDATION ENDPOINTS
+
+// PUBLICATION ENDPOINT
+
+
+// REVIEWS ENDPOINTS
+
+// ---------- GET ----------
 
 app.get('users/:user_id/reviews', async function(req, res)
 {
@@ -51,8 +58,6 @@ app.get('Publications/:publication_id/reviews/user_id', async function(req, res)
 
 // --------- POST ----------
 
-// REVIEWSERVICE
-
 app.post('users/:user_id/reviews/:publication_id', function(req, res)
 {
     const publication_id = req.params.publication_id;
@@ -76,8 +81,6 @@ app.post('users/:user_id/reviews/:publication_id', function(req, res)
 
 
 // ---------- PUT ----------
-
-// REVIEWSERVICE
 
 app.put("users/:user_id/reviews/:publication_id", function(req, res)
 {
@@ -105,8 +108,6 @@ app.put("Publications/:publication_id/reviews/user_id", function(req, res)
 
 // ---------- DELETE ----------
 
-// REVIEWSERVICE
-
  app.delete("users/:user_id/reviews/:publication_id", function(req, res) {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
@@ -116,7 +117,6 @@ app.put("Publications/:publication_id/reviews/user_id", function(req, res)
         return res.status(400).json(err);
     });
  });
-
 
  app.delete("Publications/:publication_id/reviews/user_id", function(req, res) {
     const user_id = req.params.user_id;
@@ -128,6 +128,9 @@ app.put("Publications/:publication_id/reviews/user_id", function(req, res)
     });
  });
  
+
+
+
 
 // http://localhost:3000
 
