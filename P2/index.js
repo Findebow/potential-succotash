@@ -81,11 +81,10 @@ app.post('users/:user_id/reviews/:publication_id', function(req, res)
 
 app.put("users/:user_id/reviews/:publication_id", function(req, res)
 {
-    const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
     const body = req.body;
 
-    reviewService.updatePublicationReview(body, user_id, publication_id, function() {
+    reviewService.updatePublicationReview(body, publication_id, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);
@@ -95,10 +94,9 @@ app.put("users/:user_id/reviews/:publication_id", function(req, res)
 app.put("Publications/:publication_id/reviews/user_id", function(req, res)
 {
     const user_id = req.params.user_id;
-    const publication_id = req.params.publication_id;
     const body = req.body;
 
-    reviewService.updateUserReview(body, publication_id, user_id, function() {
+    reviewService.updateUserReview(body, user_id, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);

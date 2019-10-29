@@ -1,64 +1,130 @@
 
+const Review = require('../data/db').Review;
+  
 
-  // GET
+// GET
 
-  function getReviewsByUser(req,res)
-  {
+  const getReviewsByUser = async user_id => {
+    try {
+      const review = await Review.findById(user_id);
+      return review;
+    } catch(err) {
+      return err;
+    }
+  };
+  
 
-  }
+  const getReviewsOnPublicationsByUser = async (user_id, publication_id) => {
+    try {
+      const review = await Review.findById(user_id, publication_id);
+      return review;
+    } catch(err) {
+      return err;
+    }
+  };
 
-  function getReviewsOnPublicationsByUser(req,res)
-  {
 
-  }
+  const getAllReviews = async () => {
+    const reviews = await Review.find({});
+    return reviews;
+  };
+  
 
-  function getAllReviews(req, res)
-  {
+  const getReviewsByPublication = async publication_id => {
+    try {
+      const review = await Review.findById(publication_id);
+      return review;
+    } catch (err) {
+      return err;
+    }
+  };
 
-  }
 
-  function getReviewsByPublication(req, res)
-  {
-
-  }
-
-  function getUsersReviewOnPublication(req, res)
-  {
-
-  }
+  const getUsersReviewOnPublication = async (publication_id, user_id) => {
+    try {
+      const review = await Review.findById(publication_id, user_id);
+      return review;
+    } catch(err) {
+      return err;
+    }
+  };
 
   // POST
 
-  function addReview(req, res)
-  {
-
-  }
+  function addReview(review, successCb, errorCb) {
+    Review.create(review, function(err, result) {
+      if (err) {
+        errorCb(err);
+      }
+      else {
+        successCb(result);
+      }
+    });
+  };
 
   // PUT
 
-  function updatePublicationReview(req, res)
-  {
+  function updatePublicationReview(review, user_id, publication_id, successCb, errorCb) {
+    Review.updateOne({_user_id: user_id}, {_publication_id: publication_id}, review, function(err, result) {
+      if (err) {
+        errorCb(err);
+      }
+      else {
+        successCb();
+      }
+    });
+  };
 
-  }
-
-  function updateUserReview(req,res)
-  {
-
-  }
+  function updateUserReview(review, publication_id, user_id, successCb, errorCb) {
+    Review.updateOne({_publication_id: publication_id}, {_user_id: user_id}, review, function(err, result) {
+      if(err)
+      {
+        errorCb(err);
+      }
+      else {
+        successCb();
+      }
+    });
+  };
+  
 
   // DELETE
 
-  function deletePublicationReview(req,res)
+  function deletePublicationReview(user_id, publication_id, successCb, errorCb)
   {
+    Review.deleteOne({_user_id: user_id}, {_publication_id: publication_id}, function(err, result) {
+      if (err)
+      {
+        errorCb(err);
+      }
+      else {
+        successCb();
+      }
+    });
+  };
 
-  }
-
-  function deleteUserReview(req, res)
+  function deleteUserReview(publication_id, user_id, successCb, errorCb)
   {
-
-  }
+    Review.deleteOne({_publication_id: publication_id}, {_user_id:user_id}, function(err, result) {
+      if(err) {
+        errorCb(err);
+      }
+      else {
+        successCb();
+      }
+    });
+  };
 
   module.exports = {
-    
+    getReviewsByUser,
+    getReviewsOnPublicationsByUser,
+    getAllReviews,
+    getReviewsByPublication,
+    getUsersReviewOnPublication,
+    addReview,
+    updatePublicationReview,
+    updateUserReview,
+    deletePublicationReview,
+    deleteUserReview
   };
 
