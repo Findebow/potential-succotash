@@ -14,6 +14,47 @@ app.use(bodyParser.json());
 
 // PUBLICATION ENDPOINT
 
+// ---------- GET ----------
+app.get('Publications', async function (req, res) {
+    const result = await publicationService.getAllPublications();
+    return res.json(result);
+});
+
+app.get('Publications/:pub_id', async function (req, res) {
+    const pub_id = req.params.pub_id;
+    const result = await publicationService.getPublicationsById(pub_id);
+    return res.json(result);
+});
+
+// ---------- POST ----------
+app.get('Publications', async function (req, res) {
+    const result = await publicationService.addPublication();
+    return res.json(result);
+});
+
+// ---------- DELETE ----------
+app.delete("Publications/:pub_id", function(req, res) {
+    const pub_id = req.params.pub_id;
+    publicationService.deletePublication(pub_id,  function() {
+        return res.status(204).send();
+    }, function(err) {
+        return res.status(400).json(err);
+    });
+ });
+
+ // ---------- PUT ----------
+ app.put("Publications/:pub_id", function(req, res)
+{
+    const publication_id = req.params.publication_id;
+    const body = req.body;
+
+    publicationService.updatePublication(body, publication_id, function() {
+        return res.status(204).send();
+    }, function(err) {
+        return res.status(400).json(err);
+    });
+});
+
 
 // REVIEWS ENDPOINTS
 
