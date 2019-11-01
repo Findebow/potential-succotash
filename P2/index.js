@@ -92,6 +92,7 @@ app.get('/Publications/reviews', async function(req,res)
     return res.json(result);
 });
 
+
 app.get('/Publications/:publication_id/reviews', async function(req, res)
 {
     const publication_id = req.params.publication_id;
