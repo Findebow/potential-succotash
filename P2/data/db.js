@@ -11,10 +11,10 @@
  const recommendationSchema = require('../schemas/Recommendation');
 
 
- const connection = mongoose.createConnection('mongodb+srv://dbAdmin:Pass.123@mansiondesubastas-mdfwu.mongodb.net/P2', {
-   useNewUrlParser: true,
-   useUnifiedTopology: true
- });
+//  const connection = mongoose.createConnection('mongodb+srv://dbAdmin:Pass.123@mansiondesubastas-mdfwu.mongodb.net/P2', {
+//    useNewUrlParser: true,
+//    useUnifiedTopology: true
+//  });
 
 const connection = mongoose.createConnection('mongodb+srv://dbAdmin:Pass.123@mansiondesubastas-mdfwu.mongodb.net/P2', {
   useNewUrlParser: true,
@@ -30,7 +30,7 @@ module.exports = {
   connection,
   Review,
   Publication,
-  Loan
+  Loan,
   Recommendation
   
 };
