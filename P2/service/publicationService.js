@@ -1,5 +1,7 @@
 
 const Publication = require('../data/db').Publication;
+const Loan = require('../data/db').Loan;
+const mongoose = require('mongoose');
 
 
 // GET
@@ -22,14 +24,20 @@ const getPublicationsById = async pub_id => {
 };
 
 // POST
-function addPublication(publication, successCb, errorCb) {
-    Publication.create(publication, function (err, result) {
-        if (err) {
-            errorCb(err);
-        } else {
-            successCb(result);
-        }
-    });
+function addPublication(publication, auth, successCb, errorCb) {
+    if (auth == "admin") {
+        publication._id = new mongoose.Types.ObjectId();
+        Publication.create(publication, function (err, result) {
+            if (err) {
+                errorCb(err);
+            } else {
+                successCb(result);
+            }
+        });
+    }
+    else {
+        errorCb();
+    }
 };
 
 //DELETE
@@ -54,10 +62,31 @@ function updatePublication(publication, pub_id, successCb, errorCb) {
     })
 };
 
+// Loan
+
+//POST
+function addLoan(loan, auth, successCb, errorCb) {
+    if (auth == "admin") {
+        loan._id = new mongoose.Types.ObjectId();
+        Loan.create(loan, function (err, result) {
+            if (err) {
+                errorCb(err);
+            } else {
+                successCb(result);
+            }
+        });
+    }
+    else {
+        errorCb();
+    }
+};
+
+
 module.exports = {
     getAllPublications,
     getPublicationsById,
     addPublication,
     deletePublication,
-    updatePublication
+    updatePublication,
+    addLoan
 }

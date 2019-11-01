@@ -58,6 +58,12 @@ app.put('/users/:user_id', function(req, res) {
 });
 // RECOMMENDATION ENDPOINTS
 
+app.get('/users/:user_id/recommendation' , async function (req, res) {
+    const user_id = req.params.user_id;
+    const result = await recommendationService.getRecommendationByUser(user_id);
+    return res.json(result);
+});
+
 // PUBLICATION ENDPOINT
 
 // ---------- GET ----------
@@ -75,9 +81,9 @@ app.get('/Publications/:pub_id', async function (req, res) {
 // ---------- POST ----------
 app.post('/Publications', async function (req, res) {
     const publication = req.body;
-    publication._id = mongoose.Types.ObjectId(publication._id);
-    publicationService.addPublication(publication, (err) => {
-
+    const auth = req.query.user_type;
+    //publication._id = mongoose.Types.ObjectId(publication._id);
+    publicationService.addPublication(publication, auth, (err) => {
         if (err)
         {
             return res.status(404).end();
@@ -111,6 +117,26 @@ app.delete("/Publications/:pub_id", function(req, res) {
     });
 });
 
+// ---------- POST ----------
+app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
+    var loan = req.body;
+    const user_id = mongoose.Types.ObjectId(parseInt(req.params.user_id));
+    const pub_id = mongoose.Types.ObjectId(parseInt(req.params.pub_id));
+    const auth = req.query.user_type;
+    loan.userId = user_id;
+    loan.publicationId = pub_id;
+
+    //publication._id = mongoose.Types.ObjectId(publication._id);
+    publicationService.addLoan(loan, auth, (err) => {
+        if (err)
+        {
+            return res.status(404).end();
+        }
+        return res.status(201).end();
+    }, (status) => {
+        return res.status(status).end();
+    });
+});
 
 // REVIEWS ENDPOINTS
 
@@ -136,6 +162,7 @@ app.get('/Publications/reviews', async function(req,res)
     const result = await reviewService.getAllReviews();
     return res.json(result);
 });
+
 
 app.get('/Publications/:publication_id/reviews', async function(req, res)
 {
