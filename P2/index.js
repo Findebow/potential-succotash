@@ -13,6 +13,12 @@ app.use(bodyParser.json());
 
 // RECOMMENDATION ENDPOINTS
 
+app.get('/users/:user_id/recommendation' , async function (req, res) {
+    const user_id = req.params.user_id;
+    const result = await recommendationService.getRecommendationByUser(user_id);
+    return res.json(result);
+});
+
 // PUBLICATION ENDPOINT
 
 // ---------- GET ----------
@@ -111,6 +117,7 @@ app.get('/Publications/reviews', async function(req,res)
     const result = await reviewService.getAllReviews();
     return res.json(result);
 });
+
 
 app.get('/Publications/:publication_id/reviews', async function(req, res)
 {
