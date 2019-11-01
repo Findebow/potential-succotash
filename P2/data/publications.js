@@ -1,3 +1,4 @@
+module.exports = 
 [{"id":1,"editor_first_name":"Gillian","editor_last_name":"Higgen","publication_title":"Boa caninus","isbn":"204779550-8","type":"printed","jounal":"Frontiers","year":2010},
 {"id":2,"editor_first_name":"Monika","editor_last_name":null,"publication_title":"Aegypius occipitalis","isbn":"049480068-2","type":"printed","jounal":"Liebert Open Access","year":2008},
 {"id":3,"editor_first_name":"Torre","editor_last_name":"Creighton","publication_title":"Alopex lagopus","isbn":"140771152-0","type":"electronic","jounal":"Elsevier","year":2004},
