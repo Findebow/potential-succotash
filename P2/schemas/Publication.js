@@ -1,7 +1,7 @@
 const Schema = require('mongoose').Schema;
 
 module.exports = new Schema({
-    _id: { type: Schema.Types.ObjectId, required: true },
+    _id: { type: Schema.Types.ObjectId },
     editor_first_name: {type: String, required: true},
     editor_last_name: {type: String, required: true},
     publication_title: {type: String, required: true},

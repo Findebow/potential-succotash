@@ -5,6 +5,7 @@ const userService = require('./service/userService');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const mongoose = require('mongoose');
 
 app.use(bodyParser.json());
 
@@ -15,25 +16,35 @@ app.use(bodyParser.json());
 // PUBLICATION ENDPOINT
 
 // ---------- GET ----------
-app.get('Publications', async function (req, res) {
+app.get('/Publications', async function (req, res) {
     const result = await publicationService.getAllPublications();
     return res.json(result);
 });
 
-app.get('Publications/:pub_id', async function (req, res) {
+app.get('/Publications/:pub_id', async function (req, res) {
     const pub_id = req.params.pub_id;
     const result = await publicationService.getPublicationsById(pub_id);
     return res.json(result);
 });
 
 // ---------- POST ----------
-app.get('Publications', async function (req, res) {
-    const result = await publicationService.addPublication();
-    return res.json(result);
+app.post('/Publications', async function (req, res) {
+    const publication = req.body;
+    publication._id = mongoose.Types.ObjectId(publication._id);
+    publicationService.addPublication(publication, (err) => {
+
+        if (err)
+        {
+            return res.status(404).end();
+        }
+        return res.status(201).end();
+    }, (status) => {
+        return res.status(status).end();
+    });
 });
 
 // ---------- DELETE ----------
-app.delete("Publications/:pub_id", function(req, res) {
+app.delete("/Publications/:pub_id", function(req, res) {
     const pub_id = req.params.pub_id;
     publicationService.deletePublication(pub_id,  function() {
         return res.status(204).send();
@@ -43,7 +54,7 @@ app.delete("Publications/:pub_id", function(req, res) {
  });
 
  // ---------- PUT ----------
- app.put("Publications/:pub_id", function(req, res)
+ app.put("/Publications/:pub_id", function(req, res)
 {
     const publication_id = req.params.publication_id;
     const body = req.body;
@@ -60,14 +71,14 @@ app.delete("Publications/:pub_id", function(req, res) {
 
 // ---------- GET ----------
 
-app.get('users/:user_id/reviews', async function(req, res)
+app.get('/users/:user_id/reviews', async function(req, res)
 {
     const user_id = req.params.user_id;
     const result = await reviewService.getReviewsByUser(user_id);
     return res.json(result);
 });
 
-app.get('users/:user_id/reviews/:publication_id', async function(req, res)
+app.get('/users/:user_id/reviews/:publication_id', async function(req, res)
 {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
@@ -75,20 +86,20 @@ app.get('users/:user_id/reviews/:publication_id', async function(req, res)
     return res.json(result);
 });
 
-app.get('Publications/reviews', async function(req,res)
+app.get('/Publications/reviews', async function(req,res)
 {
     const result = await reviewService.getAllReviews();
     return res.json(result);
 });
 
-app.get('Publications/:publication_id/reviews', async function(req, res)
+app.get('/Publications/:publication_id/reviews', async function(req, res)
 {
     const publication_id = req.params.publication_id;
     const result = await reviewService.getReviewsByPublication(publication_id);
     return res.json(result);
 });
 
-app.get('Publications/:publication_id/reviews/user_id', async function(req, res)
+app.get('/Publications/:publication_id/reviews/user_id', async function(req, res)
 {
     const publication_id = req.params.publication_id;
     const user_id = req.params.user_id;
@@ -99,7 +110,7 @@ app.get('Publications/:publication_id/reviews/user_id', async function(req, res)
 
 // --------- POST ----------
 
-app.post('users/:user_id/reviews/:publication_id', function(req, res)
+app.post('/users/:user_id/reviews/:publication_id', function(req, res)
 {
     const publication_id = req.params.publication_id;
     const user_id = req.params.user_id;
@@ -123,7 +134,7 @@ app.post('users/:user_id/reviews/:publication_id', function(req, res)
 
 // ---------- PUT ----------
 
-app.put("users/:user_id/reviews/:publication_id", function(req, res)
+app.put("/users/:user_id/reviews/:publication_id", function(req, res)
 {
     const publication_id = req.params.publication_id;
     const body = req.body;
@@ -135,7 +146,7 @@ app.put("users/:user_id/reviews/:publication_id", function(req, res)
     });
 });
 
-app.put("Publications/:publication_id/reviews/user_id", function(req, res)
+app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
 {
     const user_id = req.params.user_id;
     const body = req.body;
@@ -149,7 +160,7 @@ app.put("Publications/:publication_id/reviews/user_id", function(req, res)
 
 // ---------- DELETE ----------
 
- app.delete("users/:user_id/reviews/:publication_id", function(req, res) {
+ app.delete("/users/:user_id/reviews/:publication_id", function(req, res) {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
     reviewService.deletePublicationReview(user_id, publication_id, function() {
@@ -159,7 +170,7 @@ app.put("Publications/:publication_id/reviews/user_id", function(req, res)
     });
  });
 
- app.delete("Publications/:publication_id/reviews/user_id", function(req, res) {
+ app.delete("/Publications/:publication_id/reviews/user_id", function(req, res) {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
     reviewService.deleteUserReview(publication_id, user_id, function() {
