@@ -215,4 +215,7 @@ app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
 
 app.listen(3000, function() {
     console.log('server is listening on http://localhost:3000');
-})
+});
+
+module.exports = app;
+
