@@ -16,7 +16,16 @@ const getAllPublications = async () => {
 
 const getPublicationsById = async pub_id => {
     try {
-        const publicationById = await Publication.findById(pub_id);
+        var publicationById = await Publication.findById(pub_id);
+        publicationById.Loans = await Loan.find({
+            'publicationId': { $in: [
+                mongoose.Types.ObjectId(pub_id)
+            ]
+
+            }, function (err, docs) {
+                console.log(docs);
+            }
+        })
         return publicationById;
     } catch (err) {
         return err;
@@ -41,25 +50,35 @@ function addPublication(publication, auth, successCb, errorCb) {
 };
 
 //DELETE
-function deletePublication(pub_id, successCb, errorCb) {
-    Publication.deleteOne({_id: pub_id}, function (err, result) {
-        if (err) {
-            errorCb(err);
-        } else {
-            successCb(result);
-        }
-    });
+function deletePublication(pub_id, auth, successCb, errorCb) {
+    if (auth == "admin") {
+        Publication.deleteOne({_id: pub_id}, function (err, result) {
+            if (err) {
+                errorCb(err);
+            } else {
+                successCb(result);
+            }
+        });    
+    } else {
+        errorCb();
+    }
+    
 };
 
 //PUT
-function updatePublication(publication, pub_id, successCb, errorCb) {
-    Publication.updateOne({_id: pub_id}, publication, function (err, result) {
-        if (err) {
-            errorCb(err);
-        } else {
-            successCb(result);
-        }
-    })
+function updatePublication(publication, pub_id, auth, successCb, errorCb) {
+    if (auth == "admin") {
+        Publication.updateOne({_id: pub_id}, publication, function (err, result) {
+            if (err) {
+                errorCb(err);
+            } else {
+                successCb(result);
+            }
+        })    
+    } else {
+        errorCb();
+    }
+    
 };
 
 // Loan
@@ -81,6 +100,38 @@ function addLoan(loan, auth, successCb, errorCb) {
     }
 };
 
+//DELETE
+function deleteLoan(pub_id, user_id, auth, successCb, errorCb) {
+    if (auth == "admin") {
+        Loan.deleteOne({publicationId: pub_id, userId: user_id }, function (err, result) {
+            if (err) {
+                errorCb(err);
+            } else {
+                successCb(result);
+            }
+        });
+    }
+    else {
+        errorCb();
+    }
+};
+
+//PUT
+function updateLoan(loan, pub_id, auth, successCb, errorCb) {
+    if (auth == "admin") {
+        Loan.updateOne({_id: pub_id, }, loan, function (err, result) {
+            if (err) {
+                errorCb(err);
+            } else {
+                successCb(result);
+            }
+        })
+    } else {
+        errorCb();
+    }
+
+    
+};
 
 module.exports = {
     getAllPublications,
@@ -88,5 +139,7 @@ module.exports = {
     addPublication,
     deletePublication,
     updatePublication,
-    addLoan
+    addLoan,
+    deleteLoan,
+    updateLoan
 }
