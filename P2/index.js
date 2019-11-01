@@ -10,7 +10,52 @@ const mongoose = require('mongoose');
 app.use(bodyParser.json());
 
 // USER ENDPOINTS
+// ---------- GET ----------
+app.get('/users', function(req, res) {
+    userService.getAllUsers(function (users) {
+        return res.status(200).json(users);
+    }, function(err) {
+        return res.status(404).json(err);
+    });
+});
 
+app.get('/users/:user_id', function(req, res) {
+    const userId = req.params.user_id;
+    userService.getUserById(userId, function (user) {
+        return res.status(200).json(user);
+    }, function(err) {
+        return res.status(404).json(err);
+    });
+});
+
+// ---------- POST ----------
+app.post('/users', function(req, res) {
+    console.log(req.body);
+    userService.createUser(req.body, function(user) {
+        return res.status(200).json(user);
+    }, function(err) {
+        return res.status(400).json(err);
+    });
+});
+
+// ---------- DELETE ----------
+app.delete('/users/:user_id', function(req, res) {
+    const userId = req.params.user_id;
+    userService.deleteUser(userId, function () {
+        return res.status(200).send();
+    }, function(err) {
+        return res.status(404).json(err);
+    });
+});
+// ---------- PUT ----------
+app.put('/users/:user_id', function(req, res) {
+    const userId = req.params.user_id;
+    userService.updateUser(userId, req.body, function (user) {
+        return res.status(200).json(user);
+    }, function(err) {
+        return res.status(404).json(err);
+    });
+});
 // RECOMMENDATION ENDPOINTS
 
 // PUBLICATION ENDPOINT
