@@ -1,4 +1,6 @@
 const Users = require('../data/db').User;
+const Loan = require('../data/db').Loan;
+const publicationService = require('./publicationService');
 
 const userService = () => {
     const getAllUsers = (cb, errorCb) => {
@@ -34,6 +36,15 @@ const userService = () => {
             if (err) { errorCb(err); }
             else { cb(result)}
         });
+    }
+
+    const getUserPublications = (userId, cb, errorCb) => {
+        Loan.find({"userId" : userId}, function(err, loan) {
+            if (err) { errorCb(err); }
+            else {
+                console.log(loan);
+                cb(loan.publicationId); }
+        });
     };
     
     return {
@@ -41,7 +52,8 @@ const userService = () => {
         getUserById,
         createUser,
         deleteUser,
-        updateUser
+        updateUser,
+        getUserPublications
     }
 }
 
