@@ -103,7 +103,8 @@ app.post('/Publications', async function (req, res) {
 // ---------- DELETE ----------
 app.delete("/Publications/:pub_id", function(req, res) {
     const pub_id = req.params.pub_id;
-    publicationService.deletePublication(pub_id,  function() {
+    const auth = req.query.user_type;
+    publicationService.deletePublication(pub_id, auth,  function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);
@@ -121,14 +122,13 @@ app.delete("/Publications/:pub_id", function(req, res) {
     });
 });
 
+//Loan
 // ---------- POST ----------
 app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
     var loan = req.body;
-    const user_id = req.params.user_id;
-    const pub_id = req.params.pub_id;
     const auth = req.query.user_type;
-    loan.userId = user_id;
-    loan.publicationId = pub_id;
+    loan.userId = req.params.user_id;
+    loan.publicationId = req.params.pub_id;
 
     //publication._id = mongoose.Types.ObjectId(publication._id);
     publicationService.addLoan(loan, auth, (err) => {
@@ -141,6 +141,18 @@ app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
         return res.status(status).end();
     });
 });
+
+// ---------- DELETE ----------
+app.delete("/users/:user_id/publications/:pub_id", function(req, res) {
+    const pub_id = req.params.pub_id;
+    const user_id = req.params.user_id;
+    const auth = req.query.user_type;
+    publicationService.deleteLoan(pub_id, user_id, auth,  function() {
+        return res.status(204).send();
+    }, function(err) {
+        return res.status(400).json(err);
+    });
+ });
 
 // REVIEWS ENDPOINTS
 

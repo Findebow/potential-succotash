@@ -6,15 +6,15 @@
  const loanSchema = require('../schemas/Loan');
  const recommendationSchema = require('../schemas/Recommendation');
 
-// const connection = mongoose.createConnection('mongodb+srv://dbAdmin:Pass.123@mansiondesubastas-mdfwu.mongodb.net/P2', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
-
-const connection = mongoose.createConnection('mongodb+srv://finnbogi:Katla104@hop-gtcnm.mongodb.net/test?retryWrites=true&w=majority', {
+const connection = mongoose.createConnection('mongodb+srv://dbAdmin:Pass.123@mansiondesubastas-mdfwu.mongodb.net/P2', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
+// const connection = mongoose.createConnection('mongodb+srv://finnbogi:Katla104@hop-gtcnm.mongodb.net/test?retryWrites=true&w=majority', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
 
 
 const Review = connection.model('Review', reviewSchema);
