@@ -42,7 +42,7 @@ const userService = () => {
         Loan.find({"userId" : userId}, async function(err, loan) {
             if (err) { errorCb(err); }
             else {
-                var publication_list = []
+                var publication_list = [];
                 for(i = 0; i < loan.length; i++) {
                     publication = await publicationService.getPublicationsById(loan[i].publicationId);
                     publication_list.push(publication);

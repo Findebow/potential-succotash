@@ -4,23 +4,19 @@ const Review = require('../data/db').Review;
 
 // GET
 
-  const getReviewsByUser = async user_id => {
-    try {
-      const review = await Review.findById(user_id);
-      return review;
-    } catch(err) {
-      return err;
-    }
+  const getReviewsByUser = async (user_id, cb, errorCb) => {
+    Review.find({"userId" : user_id} , async function(err, reviews) {
+      if (err) {errorCb(err); }
+      else { cb(reviews); }
+    });
   };
   
 
-  const getReviewsOnPublicationsByUser = async (user_id, publication_id) => {
-    try {
-      const review = await Review.findById(user_id, publication_id);
-      return review;
-    } catch(err) {
-      return err;
-    }
+  const getReviewsByPublicationIdAndUserId = async (user_id, pub_id, cb, errorCb) => {
+    Review.find({"userId" : user_id, "publicationId" : pub_id}, async function(err, reviews) {
+      if (err) {errorCb(err); }
+      else { cb(reviews); }
+    });
   };
 
 
@@ -30,35 +26,19 @@ const Review = require('../data/db').Review;
   };
   
 
-  const getReviewsByPublication = async publication_id => {
-    try {
-      const review = await Review.findById(publication_id);
-      return review;
-    } catch (err) {
-      return err;
-    }
-  };
-
-
-  const getUsersReviewOnPublication = async (publication_id, user_id) => {
-    try {
-      const review = await Review.findById(publication_id, user_id);
-      return review;
-    } catch(err) {
-      return err;
-    }
+  const getReviewsByPublication = async (pub_id, cb, errorCb) => {
+    Review.find({"publicationId": pub_id}, async function(err, reviews) {
+      if (err) {errorCb(err); }
+      else { cb(reviews); }
+      });
   };
 
   // POST
 
   function addReview(review, successCb, errorCb) {
     Review.create(review, function(err, result) {
-      if (err) {
-        errorCb(err);
-      }
-      else {
-        successCb(result);
-      }
+      if (err) {errorCb(err);}
+      else {successCb(result);}
     });
   };
 
@@ -117,10 +97,9 @@ const Review = require('../data/db').Review;
 
   module.exports = {
     getReviewsByUser,
-    getReviewsOnPublicationsByUser,
     getAllReviews,
     getReviewsByPublication,
-    getUsersReviewOnPublication,
+    getReviewsByPublicationIdAndUserId,
     addReview,
     updatePublicationReview,
     updateUserReview,
