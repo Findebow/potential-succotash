@@ -113,11 +113,9 @@ app.delete("/Publications/:pub_id", function(req, res) {
  // ---------- PUT ----------
  app.put("/Publications/:pub_id", function(req, res)
 {
-    const publication_id = req.params.publication_id;
-    const body = req.body;
-
-    publicationService.updatePublication(body, publication_id, function() {
-        return res.status(204).send();
+    const publication_id = req.params.pub_id;
+    publicationService.updatePublication(publication_id, req.body, function(result) {
+        return res.status(200).json(result);
     }, function(err) {
         return res.status(400).json(err);
     });

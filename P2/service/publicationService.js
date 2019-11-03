@@ -28,8 +28,7 @@ const getAllPublications = async (cb, errorCb) => {
                 }
                 cb(calculated);
             }
-        });
-        
+        });      
 };
 
 const getPublicationsById = async pub_id => {
@@ -65,14 +64,11 @@ function deletePublication(pub_id, successCb, errorCb) {
 };
 
 //PUT
-function updatePublication(publication, pub_id, successCb, errorCb) {
-    Publication.updateOne({_id: pub_id}, publication, function (err, result) {
-        if (err) {
-            errorCb(err);
-        } else {
-            successCb(result);
-        }
-    })
+const updatePublication = (pub_id, pub, successCb, errorCb) => {
+    Publication.updateOne({"_id": pub_id}, pub, function (err, result) {
+        if (err) { errorCb(err); } 
+        else { successCb(result); }
+    });
 };
 
 // Loan

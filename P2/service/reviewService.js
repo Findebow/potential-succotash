@@ -1,4 +1,4 @@
-
+const publicationService = require('./publicationService');
 const Review = require('../data/db').Review;
   
 
@@ -35,7 +35,18 @@ const Review = require('../data/db').Review;
 
   // POST
 
-  function addReview(review, successCb, errorCb) {
+  const addReview = async (review, successCb, errorCb) => {
+    // update puplication rating
+    pub = await publicationService.getPublicationsById(review.publicationId);
+    pub.total_rating += review.rating;
+    pub.rating_count ++;
+    console.log(pub);
+    publicationService.updatePublication(review.publicationId, pub, function(updatedPub) {
+      console.log(updatedPub);
+    }, function (err) {
+      errorCb(err);
+    });
+    // create new review
     Review.create(review, function(err, result) {
       if (err) {errorCb(err);}
       else {successCb(result);}
