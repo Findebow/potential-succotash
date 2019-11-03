@@ -175,8 +175,11 @@ app.get('/Publications/reviews', async function(req,res)
 app.get('/Publications/:publication_id/reviews', async function(req, res)
 {
     const publication_id = req.params.publication_id;
-    const result = await reviewService.getReviewsByPublication(publication_id);
-    return res.json(result);
+    await reviewService.getReviewsByPublication(publication_id, function (reviews) {
+        return res.status(200).json(reviews);
+    }, function(err) {
+        return res.status(400).json(err);
+    });
 });
 
 app.get('/Publications/:publication_id/reviews/user_id', async function(req, res)
@@ -192,22 +195,17 @@ app.get('/Publications/:publication_id/reviews/user_id', async function(req, res
 
 app.post('/users/:user_id/reviews/:publication_id', function(req, res)
 {
-    const publication_id = req.params.publication_id;
+    var review = req.body;
     const user_id = req.params.user_id;
-
-    const review = req.body;
-    review.publication_id = publication_id;
-    review.user_id = user_id;
+    const pub_id = req.params.publication_id;
+    review.userId = user_id;
+    review.publicationId = pub_id;
     
-    reviewService.addReview(publication_id, user_id, review, (err) => {
-        if (err)
-        {
-            return res.status(404).end();
-        }
-        return res.status(201).end();
-    }, (status) => {
-        return res.status(status).end();
-    });
+    reviewService.addReview(review, function(result) {
+        return res.status(200).json(result);
+    }, function(err) {
+        return res.status(400).json(err);
+    })
 
 });
 

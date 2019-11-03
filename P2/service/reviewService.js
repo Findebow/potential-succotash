@@ -30,13 +30,11 @@ const Review = require('../data/db').Review;
   };
   
 
-  const getReviewsByPublication = async publication_id => {
-    try {
-      const review = await Review.findById(publication_id);
-      return review;
-    } catch (err) {
-      return err;
-    }
+  const getReviewsByPublication = async (pub_id, cb, errorCb) => {
+    Review.find({"publicationId": pub_id}, async function(err, reviews) {
+      if (err) {errorCb(err); }
+      else { cb(reviews); }
+      });
   };
 
 
@@ -53,12 +51,8 @@ const Review = require('../data/db').Review;
 
   function addReview(review, successCb, errorCb) {
     Review.create(review, function(err, result) {
-      if (err) {
-        errorCb(err);
-      }
-      else {
-        successCb(result);
-      }
+      if (err) {errorCb(err);}
+      else {successCb(result);}
     });
   };
 
