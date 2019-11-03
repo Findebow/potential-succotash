@@ -30,7 +30,7 @@ app.get('/users/:user_id', function(req, res) {
 
 app.get('/users/:user_id/Publications', function(req, res) {
     const userId = req.params.user_id;
-    userService.getUserPublications(userId, function (publications) {
+    userService.getPublicationByUserId(userId, function (publications) {
         return res.status(200).json(publications);
     }, function(err) {
         return res.status(400).json(err);
