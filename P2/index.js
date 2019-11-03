@@ -76,8 +76,11 @@ app.get('/users/:user_id/recommendation' , async function (req, res) {
 
 // ---------- GET ----------
 app.get('/Publications', async function (req, res) {
-    const result = await publicationService.getAllPublications();
-    return res.json(result);
+    await publicationService.getAllPublications(function (publications) {
+        return res.status(200).json(publications);
+    }, function (err) {
+        return res.status(400).json(err);
+    });
 });
 
 app.get('/Publications/:pub_id', async function (req, res) {
@@ -90,15 +93,10 @@ app.get('/Publications/:pub_id', async function (req, res) {
 app.post('/Publications', async function (req, res) {
     const publication = req.body;
     const auth = req.query.user_type;
-    //publication._id = mongoose.Types.ObjectId(publication._id);
-    publicationService.addPublication(publication, auth, (err) => {
-        if (err)
-        {
-            return res.status(404).end();
-        }
-        return res.status(201).end();
-    }, (status) => {
-        return res.status(status).end();
+    publicationService.addPublication(publication, auth, function(publication) {
+        return res.status(200).json(publication)
+    }, function (err) {
+        return res.status(400).json(err);
     });
 });
 
@@ -116,12 +114,9 @@ app.delete("/Publications/:pub_id", function(req, res) {
  // ---------- PUT ----------
  app.put("/Publications/:pub_id", function(req, res)
 {
-    const publication_id = req.params.publication_id;
-    const body = req.body;
-    const auth = req.query.user_type;
-
-    publicationService.updatePublication(body, publication_id, auth, function() {
-        return res.status(204).send();
+    const publication_id = req.params.pub_id;
+    publicationService.updatePublication(publication_id, req.body, function(result) {
+        return res.status(200).json(result);
     }, function(err) {
         return res.status(400).json(err);
     });
