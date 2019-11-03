@@ -9,7 +9,6 @@ module.exports = new Schema({
     type: {type: String, required: false},
     jounal: {type: String, required: true},
     year: {type: Number, required: false},
-    rating_count: {type: Number, required: false},
-    total_rating: {type: Number, required: false},
-    average_rating: {type: Number, required: false}
+    rating_count: {type: Number, required: true},
+    total_rating: {type: Number, required: true}
   });
