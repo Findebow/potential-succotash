@@ -131,11 +131,6 @@ app.delete("/Publications/:pub_id", function(req, res) {
 // ---------- POST ----------
 app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
     var loan = req.body;
-<<<<<<< HEAD
-=======
-    const user_id = req.params.user_id;
-    const pub_id = req.params.pub_id;
->>>>>>> b11e7394798321071ba252ba4b3df916005e49e4
     const auth = req.query.user_type;
     loan.userId = req.params.user_id;
     loan.publicationId = req.params.pub_id;
