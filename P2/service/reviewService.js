@@ -12,13 +12,11 @@ const Review = require('../data/db').Review;
   };
   
 
-  const getReviewsOnPublicationsByUser = async (user_id, publication_id) => {
-    try {
-      const review = await Review.findById(user_id, publication_id);
-      return review;
-    } catch(err) {
-      return err;
-    }
+  const getReviewsByPublicationIdAndUserId = async (user_id, pub_id, cb, errorCb) => {
+    Review.find({"userId" : user_id, "publicationId" : pub_id}, async function(err, reviews) {
+      if (err) {errorCb(err); }
+      else { cb(reviews); }
+    });
   };
 
 
@@ -33,16 +31,6 @@ const Review = require('../data/db').Review;
       if (err) {errorCb(err); }
       else { cb(reviews); }
       });
-  };
-
-
-  const getUsersReviewOnPublication = async (publication_id, user_id) => {
-    try {
-      const review = await Review.findById(publication_id, user_id);
-      return review;
-    } catch(err) {
-      return err;
-    }
   };
 
   // POST
@@ -109,10 +97,9 @@ const Review = require('../data/db').Review;
 
   module.exports = {
     getReviewsByUser,
-    getReviewsOnPublicationsByUser,
     getAllReviews,
     getReviewsByPublication,
-    getUsersReviewOnPublication,
+    getReviewsByPublicationIdAndUserId,
     addReview,
     updatePublicationReview,
     updateUserReview,
