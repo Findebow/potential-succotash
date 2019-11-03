@@ -1,4 +1,6 @@
 const Users = require('../data/db').User;
+const Loan = require('../data/db').Loan;
+const publicationService = require('./publicationService');
 
 const userService = () => {
     const getAllUsers = (cb, errorCb) => {
@@ -34,6 +36,20 @@ const userService = () => {
             if (err) { errorCb(err); }
             else { cb(result)}
         });
+    }
+
+    const getPublicationByUserId = async (userId, cb, errorCb) => {
+        Loan.find({"userId" : userId}, async function(err, loan) {
+            if (err) { errorCb(err); }
+            else {
+                var publication_list = []
+                for(i = 0; i < loan.length; i++) {
+                    publication = await publicationService.getPublicationsById(loan[i].publicationId);
+                    publication_list.push(publication);
+                }
+                cb(publication_list);
+            }
+        });
     };
     
     return {
@@ -41,7 +57,8 @@ const userService = () => {
         getUserById,
         createUser,
         deleteUser,
-        updateUser
+        updateUser,
+        getPublicationByUserId
     }
 }
 
