@@ -7,7 +7,7 @@ const publicationSchema = new mongoose.Schema({
     publication_title: {type: String, required: true},
     isbn: {type: String, required: true},
     type: {type: String, required: true},
-    jounal: {type: String, required: true},
+    journal: {type: String, required: true},
     year: {type: Number, required: true}
 });
 

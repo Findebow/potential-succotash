@@ -7,7 +7,7 @@ describe('Publication Model Test', () => {
     // It's just so easy to connect to the MongoDB Memory Server 
     // By using mongoose.connect
     beforeAll(async () => {
-        await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true, useCreateIndex: true }, (err) => {
+        await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
             if (err) {
                 console.error(err);
                 process.exit(1);
@@ -54,7 +54,7 @@ describe('Publication Model Test', () => {
         expect(err.errors.publication_title).toBeDefined();
         expect(err.errors.isbn).toBeDefined();
         expect(err.errors.type).toBeDefined();
-        expect(err.errors.jounal).toBeDefined();
+        expect(err.errors.journal).toBeDefined();
         expect(err.errors.year).toBeDefined();
     });
 
