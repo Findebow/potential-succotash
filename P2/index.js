@@ -28,9 +28,17 @@ app.get('/users/:user_id', function(req, res) {
     });
 });
 
+app.get('/users/:user_id/Publications', function(req, res) {
+    const userId = req.params.user_id;
+    userService.getPublicationByUserId(userId, function (publications) {
+        return res.status(200).json(publications);
+    }, function(err) {
+        return res.status(400).json(err);
+    });
+});
+
 // ---------- POST ----------
 app.post('/users', function(req, res) {
-    console.log(req.body);
     userService.createUser(req.body, function(user) {
         return res.status(200).json(user);
     }, function(err) {
@@ -123,6 +131,11 @@ app.delete("/Publications/:pub_id", function(req, res) {
 // ---------- POST ----------
 app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
     var loan = req.body;
+<<<<<<< HEAD
+=======
+    const user_id = req.params.user_id;
+    const pub_id = req.params.pub_id;
+>>>>>>> b11e7394798321071ba252ba4b3df916005e49e4
     const auth = req.query.user_type;
     loan.userId = req.params.user_id;
     loan.publicationId = req.params.pub_id;
@@ -273,4 +286,7 @@ app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
 
 app.listen(3000, function() {
     console.log('server is listening on http://localhost:3000');
-})
+});
+
+module.exports = app;
+
