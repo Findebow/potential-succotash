@@ -4,13 +4,11 @@ const Review = require('../data/db').Review;
 
 // GET
 
-  const getReviewsByUser = async user_id => {
-    try {
-      const review = await Review.findById(user_id);
-      return review;
-    } catch(err) {
-      return err;
-    }
+  const getReviewsByUser = async (user_id, cb, errorCb) => {
+    Review.find({"userId" : user_id} , async function(err, reviews) {
+      if (err) {errorCb(err); }
+      else { cb(reviews); }
+    });
   };
   
 

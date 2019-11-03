@@ -153,8 +153,11 @@ app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
 app.get('/users/:user_id/reviews', async function(req, res)
 {
     const user_id = req.params.user_id;
-    const result = await reviewService.getReviewsByUser(user_id);
-    return res.json(result);
+    await reviewService.getReviewsByUser(user_id, function (reviews) {
+        return res.status(200).json(reviews);
+    }, function (err) {
+        return res.status(400).json(err);
+    });
 });
 
 app.get('/users/:user_id/reviews/:publication_id', async function(req, res)
