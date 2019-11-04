@@ -134,14 +134,10 @@ app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
     loan.publicationId = req.params.pub_id;
 
     //publication._id = mongoose.Types.ObjectId(publication._id);
-    publicationService.addLoan(loan, auth, (err) => {
-        if (err)
-        {
-            return res.status(404).end();
-        }
-        return res.status(201).end();
-    }, (status) => {
-        return res.status(status).end();
+    publicationService.addLoan(loan, auth, function() {
+        return res.status(204).send();
+    }, function(err) {
+        return res.status(400).json(err);
     });
 });
 
@@ -184,8 +180,11 @@ app.get('/users/:user_id/reviews/:publication_id', async function(req, res)
 
 app.get('/Publications/reviews', async function(req,res)
 {
-    const result = await reviewService.getAllReviews();
-    return res.json(result);
+    reviewService.getAllReviews(function (reviews) {
+        return res.status(200).json(reviews);
+    }, function(err) {
+        return res.status(400).json(err);
+    });
 });
 
 
@@ -199,7 +198,7 @@ app.get('/Publications/:publication_id/reviews', async function(req, res)
     });
 });
 
-app.get('/Publications/:publication_id/reviews/user_id', async function(req, res)
+app.get('/Publications/:publication_id/reviews/:user_id', async function(req, res)
 {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;

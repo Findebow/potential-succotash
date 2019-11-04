@@ -1,7 +1,6 @@
 const Users = require('../data/db').User;
 const Loan = require('../data/db').Loan;
 const publicationService = require('./publicationService');
-const reviewService = require('./reviewService');
 
 const userService = () => {
 // GET
@@ -25,6 +24,7 @@ const userService = () => {
         // find all loans with matching user id
         Loan.find({"userId" : userId}, async function(err, loan) {
             if (err) { errorCb(err); }
+            else if(loan == "") {errorCb("no loans found for user"); }
             else {
                 // find all publications mathcing publication ids
                 var publication_list = [];
@@ -50,6 +50,8 @@ const userService = () => {
 
 // DELETE
     const deleteUser = async (userId, cb, errorCb) => {
+        // error if user still has loan
+
         // delete user with matching id
         Users.deleteOne( {"_id" : userId}, function(err, result) {
             if (err) { errorCb(err); }
