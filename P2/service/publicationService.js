@@ -52,7 +52,9 @@ const getPublicationsById = async pub_id => {
 // POST
 function addPublication(publication, auth, successCb, errorCb) {
     if (auth == "admin") {
-        publication._id = new mongoose.Types.ObjectId();
+        if (publication._id == undefined) {
+            publication._id = new mongoose.Types.ObjectId();
+        }
         Publication.create(publication, function (err, result) {
             if (err) { errorCb(err); } 
             else { successCb(result); }
