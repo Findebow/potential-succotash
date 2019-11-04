@@ -1,5 +1,5 @@
 const Review = require('../data/db').Review;
-const publicationService = require('./publicationService');
+const Publication = require('../data/db').Publication;
 
 const reviewService = () => {
 // GET
@@ -51,21 +51,18 @@ const reviewService = () => {
       );
     }
     else {
-      // // get publication
-      // pub = await publicationService.getPublicationsById(review.publicationId, function(found) {
-      //   console.log(found);
-      //   return found;
-      // }, function(err) { errorCb(err); });
+      // get publication
+      pub = await Publication.find({"_id": review.publicationId});
 
-      // // edit publication
-      // pub.total_rating += review.rating;
-      // pub.rating_count ++;
+      // edit publication
+      pub[0].total_rating += review.rating;
+      pub[0].rating_count ++;
 
-      // // update publication
-      // publicationService.updatePublication(review.publicationId, pub, function() {
-      // }, function (err) {
-      //   errorCb(err);
-      // });
+      // update publication
+      await Publication.updateOne({"_id": review.publicationId}, pub[0], function (err, result) {
+        if (err) { errorCb(err); } 
+        else { }
+      });
 
       // create new review
       Review.create(review, function(err, result) {
@@ -78,24 +75,23 @@ const reviewService = () => {
   // PUT
 
   const updateReview = async (review, user_id, pub_id, successCb, errorCb) => {
-    // // get review
-    // rev = await Review.find({"userId" : user_id, "publicationId" : pub_id});
+    // get review
+    rev = await Review.find({"userId" : user_id, "publicationId" : pub_id});
 
-    // // get publication
-    // pub = await publicationService.getPublicationsById(pub_id);
+    // get publication
+    pub = await Publication.find({"_id": pub_id});
 
-    // // minus rating
-    // pub.total_rating -= rev[0].rating;
+    // edit publication
+    pub[0].total_rating -= rev[0].rating;
+    pub[0].total_rating += review.rating;
 
-    // // add new rating
-    // pub.total_rating += review.rating;
+    // update publication
+    await Publication.updateOne({"_id": pub_id}, pub[0], function (err, result) {
+      if (err) { errorCb(err); } 
+      else { }
+    });
     
-    // // update publication
-    // publicationService.updatePublication(pub_id, pub, function(placeholder) {
-    //   successCb(placeholder)
-    // }, function (err) {
-    //   errorCb(err);
-    // });
+
     // update review
     Review.updateOne({"userId" : user_id, "publicationId" : pub_id}, review, function(err, result) {
       if (err) { errorCb(err); }
@@ -106,24 +102,21 @@ const reviewService = () => {
   // DELETE
 
   const deleteReview = async (user_id, pub_id, successCb, errorCb) => {
-    // // get publication
-    // pub = await publicationService.getPublicationsById(pub_id);
+    // get review
+    rev = await Review.find({"userId" : user_id, "publicationId" : pub_id});
 
-    // // get review
-    // rev = await Review.find({"userId" : user_id, "publicationId" : pub_id});
+    // get publication
+    pub = await Publication.find({"_id": pub_id});
 
-    // // minus rating 
-    // pub.total_rating -= rev[0].rating;
-    
-    // // lower rating count
-    // pub.rating_count --;
+    // edit publication
+    pub[0].total_rating -= rev[0].rating;
+    pub[0].rating_count --;
 
-    // // update publication
-    // publicationService.updatePublication(pub_id, pub, function(placeholder) {
-    //   successCb(placeholder)
-    // }, function (err) {
-    //   errorCb(err);
-    // });
+    // update publication
+    await Publication.updateOne({"_id": pub_id}, pub[0], function (err, result) {
+      if (err) { errorCb(err); } 
+      else { }
+    });
 
     // remove review
     Review.deleteOne({"userId" : user_id, "publicationId" : pub_id}, function(err, result) {
