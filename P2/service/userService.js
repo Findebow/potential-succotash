@@ -4,13 +4,32 @@ const publicationService = require('./publicationService');
 
 const userService = () => {
 // GET
-    const getAllUsers = (cb, errorCb) => {
+    const getAllUsers =  async (_date, loanDuration, cb, errorCb) => {
         // find all users
-        Users.find({}, function(err, users) {
-            if (err) { errorCb(err); }
-            else if(users == "") { errorCb("no users"); } 
-            else { cb(users); }
-        });
+        if(_date != null && loanDuration == null) {
+            date = new Date(_date);
+            loans = await Loan.find({});
+            users = [];
+            for(i = 0; i < loans.length; i++) {
+                if(loans[i].borrowDate < date && loans[i].returnDate > date) {
+                    users.push (await Users.find({"_id": loans[i].userId})) 
+                }
+            }
+            cb(users);
+        }
+        else if(_date == null && loanDuration != null) {
+            // need to implement
+        }
+        else if(_date != null && loanDuration != null) {
+            // need to implement
+        }
+        else {
+            Users.find({}, function(err, users) {
+                if (err) { errorCb(err); }
+                else if(users == "") { errorCb("no users"); } 
+                else { cb(users); }
+            });
+        }
     };
 
     const getUserById = (userId, cb, errorCb) => {

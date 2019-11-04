@@ -12,7 +12,10 @@ app.use(bodyParser.json());
 // USER ENDPOINTS
 // ---------- GET ----------
 app.get('/users', function(req, res) {
-    userService.getAllUsers(function (users) {
+    const date = req.query.LoanDate;
+    const loanDuration = req.query.LoanDuration;
+
+    userService.getAllUsers(date, loanDuration, function (users) {
         return res.status(200).json(users);
     }, function(err) {
         return res.status(404).json(err);
@@ -142,12 +145,11 @@ app.delete("/Publications/:pub_id", function(req, res) {
 // ---------- POST ----------
 app.post('/users/:user_id/publications/:pub_id', async function (req, res) {
     var loan = req.body;
-    const auth = req.query.user_type;
     loan.userId = req.params.user_id;
     loan.publicationId = req.params.pub_id;
 
     //publication._id = mongoose.Types.ObjectId(publication._id);
-    publicationService.addLoan(loan, auth, function() {
+    publicationService.addLoan(loan, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);

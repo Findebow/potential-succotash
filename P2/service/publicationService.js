@@ -158,18 +158,12 @@ const updatePublication = (pub_id, pub, auth ,successCb, errorCb) => {
 
 //POST
 function addLoan(loan, auth, successCb, errorCb) {
-    // check if user is autorized
-    if (auth == "admin") {
-        // create new loan
-        loan._id = new mongoose.Types.ObjectId();
-        Loan.create(loan, function (err, result) {
-            if (err) { errorCb(err); } 
-            else { successCb(result); }
-        });
-    }
-    else {
-        errorCb("access denied");
-    }
+    // create new loan
+    loan._id = new mongoose.Types.ObjectId();
+    Loan.create(loan, function (err, result) {
+        if (err) { errorCb(err); } 
+        else { successCb(result); }
+    });
 };
 
 //DELETE
