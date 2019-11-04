@@ -143,12 +143,15 @@ const deletePublication = async (pub_id, auth, successCb, errorCb) => {
 };
 
 //PUT
-const updatePublication = (pub_id, pub, successCb, errorCb) => {
+const updatePublication = (pub_id, pub, auth ,successCb, errorCb) => {
     // update publication with matching id
-    Publication.updateOne({"_id": pub_id}, pub, function (err, result) {
-        if (err) { errorCb(err); } 
-        else { successCb(result); }
-    });
+    if( auth == "admin") {
+        Publication.updateOne({"_id": pub_id}, pub, function (err, result) {
+            if (err) { errorCb(err); } 
+            else { successCb(result); }
+        });
+    }
+    else { errorCb("access denied");}
 };
 
 // Loan

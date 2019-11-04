@@ -39,30 +39,42 @@ app.get('/users/:user_id/Publications', function(req, res) {
 
 // ---------- POST ----------
 app.post('/users', function(req, res) {
-    userService.createUser(req.body, function(user) {
-        return res.status(200).json(user);
-    }, function(err) {
-        return res.status(400).json(err);
-    });
+    const auth = req.query.user_type;
+    if( auth == "admin") {
+        userService.createUser(req.body, function(user) {
+            return res.status(200).json(user);
+        }, function(err) {
+            return res.status(400).json(err);
+        });
+    }
+    else { return res.status(400).json("access denied"); }
 });
 
 // ---------- DELETE ----------
 app.delete('/users/:user_id', function(req, res) {
     const userId = req.params.user_id;
-    userService.deleteUser(userId, function () {
-        return res.status(200).send();
-    }, function(err) {
-        return res.status(404).json(err);
-    });
+    const auth = req.query.user_type;
+    if( auth == "admin") {
+        userService.deleteUser(userId, function () {
+            return res.status(200).send();
+        }, function(err) {
+            return res.status(404).json(err);
+        });
+    }
+    else { return res.status(400).json("access denied"); }
 });
 // ---------- PUT ----------
 app.put('/users/:user_id', function(req, res) {
     const userId = req.params.user_id;
-    userService.updateUser(userId, req.body, function (user) {
-        return res.status(200).json(user);
-    }, function(err) {
-        return res.status(404).json(err);
-    });
+    const auth = req.query.user_type;
+    if( auth == "admin") {
+        userService.updateUser(userId, req.body, function (user) {
+            return res.status(200).json(user);
+        }, function(err) {
+            return res.status(404).json(err);
+        });
+    }
+    else { return res.status(400).json("access denied"); }
 });
 // RECOMMENDATION ENDPOINTS
 
@@ -118,7 +130,8 @@ app.delete("/Publications/:pub_id", function(req, res) {
  app.put("/Publications/:pub_id", function(req, res)
 {
     const publication_id = req.params.pub_id;
-    publicationService.updatePublication(publication_id, req.body, function(result) {
+    const auth = req.query.user_type;
+    publicationService.updatePublication(publication_id, req.body, auth, function(result) {
         return res.status(200).json(result);
     }, function(err) {
         return res.status(400).json(err);
