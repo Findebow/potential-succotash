@@ -7,6 +7,7 @@ const reviewService = () => {
     // find all reviews with matching user id
     Review.find({"userId" : user_id} , async function(err, reviews) {
       if (err) {errorCb(err); }
+      else if(reviews == "") { errorCb("no reviews"); } 
       else { cb(reviews); }
     });
   };
@@ -16,6 +17,7 @@ const reviewService = () => {
     // find all revews with matching publication and user ids
     Review.find({"userId" : user_id, "publicationId" : pub_id}, async function(err, reviews) {
       if (err) {errorCb(err); }
+      else if(reviews == "") { errorCb("not found"); }
       else { cb(reviews); }
     });
   };
@@ -34,6 +36,7 @@ const reviewService = () => {
     // find all reviews with matching publication id
     Review.find({"publicationId": pub_id}, async function(err, reviews) {
       if (err) {errorCb(err); }
+      else if(reviews == "") { errorCb("no reviews found for publication"); }
       else { cb(reviews); }
       });
   };
