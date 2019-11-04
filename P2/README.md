@@ -26,7 +26,7 @@ This is a library system written in node js that holds information of articles, 
     * node index.js
 
 * If you want to run and test our code as well you run:
-    * npm test
+    * npm run test
 
 
 ## Sending requests
