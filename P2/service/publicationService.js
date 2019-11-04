@@ -52,7 +52,6 @@ const getPublicationsById = async (pub_id, cb, errorCb) => {
     // find publication with matching id
     await Publication.find({_id : pub_id}, function(err, publication) {
         if (err) { errorCb(err); }
-        else if(publication == null) { errorCb("no publication");}
         else {
             // if there is a rating
             if(publication[0].rating_count > 0) {
