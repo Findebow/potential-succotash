@@ -182,9 +182,8 @@ function deleteLoan(pub_id, user_id, auth, successCb, errorCb) {
 };
 
 //PUT
-function updateLoan(loan, pub_id, auth, successCb, errorCb) {
+function updateLoan(loan, pub_id, successCb, errorCb) {
     // check if user is autorized
-    if (auth == "admin") {
         // update loan with matching id
         Loan.updateOne({_id: pub_id, }, loan, function (err, result) {
             if (err) {
@@ -193,11 +192,6 @@ function updateLoan(loan, pub_id, auth, successCb, errorCb) {
                 successCb(result);
             }
         })
-    } else {
-        errorCb();
-    }
-
-    
 };
 
 module.exports = {
