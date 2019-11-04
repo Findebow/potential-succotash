@@ -8,6 +8,7 @@ const userService = () => {
         // find all users
         Users.find({}, function(err, users) {
             if (err) { errorCb(err); }
+            else if(users == "") { errorCb("no users"); } 
             else { cb(users); }
         });
     };
@@ -16,6 +17,7 @@ const userService = () => {
         // find user with mathing id
         Users.findById(userId, function(err, user) {
             if (err) { errorCb(err); }
+            else if(users == "") { errorCb("not found"); } 
             else { cb(user); }
         });
     };
