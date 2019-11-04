@@ -50,13 +50,23 @@ const userService = () => {
 
 // DELETE
     const deleteUser = async (userId, cb, errorCb) => {
-        // error if user still has loan
-
-        // delete user with matching id
-        Users.deleteOne( {"_id" : userId}, function(err, result) {
+        Loan.find({"userId" : userId}, async function(err, loan) {
             if (err) { errorCb(err); }
-            else { cb(result)}
-        });
+            else {
+                // check if users sill has publicaton on loan
+                if (loan == "") {
+                    // delete user with matching id
+                    Users.deleteOne( {"_id" : userId}, function(err, result) {
+                        if (err) { errorCb(err); }
+                        else { cb(result)}
+                    });
+                }
+                else {
+                    errorCb("user has publication on loan");
+                }
+            }
+        })
+        
     };
 
 // PUT

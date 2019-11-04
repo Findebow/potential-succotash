@@ -115,11 +115,14 @@ const deletePublication = async (pub_id, auth, successCb, errorCb) => {
         }, function(err) { errorCb(err); })
         // delete loans for publication
         Loan.find({"publicationId" : pub_id}, async function(err, loan) {
-            for(i = 0; i < loan.length; i++) {
-                deleteLoan(pub_id, loan[i].userId, "admin", function() {
-                }, function(err) { errorCb(err); })
+            if(err) {errorCb(err); }
+            else {
+                for(i = 0; i < loan.length; i++) {
+                    deleteLoan(pub_id, loan[i].userId, "admin", function() {
+                    }, function(err) { errorCb(err); });
+                }
             }
-        })
+        });
 
         // delete publication with matching id
         Publication.deleteOne({_id: pub_id}, function (err, result) {
