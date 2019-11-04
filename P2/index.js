@@ -85,8 +85,11 @@ app.get('/Publications', async function (req, res) {
 
 app.get('/Publications/:pub_id', async function (req, res) {
     const pub_id = req.params.pub_id;
-    const result = await publicationService.getPublicationsById(pub_id);
-    return res.json(result);
+    await publicationService.getPublicationsById(pub_id, function (publication) {
+        return res.status(200).json(publication);
+    }, function(err) {
+        return res.status(400).json(err);
+    });
 });
 
 // ---------- POST ----------
@@ -245,7 +248,7 @@ app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
 {
     const user_id = req.params.user_id;
     const pub_id = req.params.publication_id;
-    
+
     reviewService.updateReview(req.body, user_id, pub_id, function() {
         return res.status(204).send();
     }, function(err) {
