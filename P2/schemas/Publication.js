@@ -7,7 +7,7 @@ module.exports = new Schema({
     publication_title: {type: String, required: true},
     isbn: {type: String, required: true},
     type: {type: String, required: false},
-    journal: {type: String, required: true},
+    jounal: {type: String, required: true},
     year: {type: Number, required: false},
     rating_count: {type: Number, required: true},
     total_rating: {type: Number, required: true}

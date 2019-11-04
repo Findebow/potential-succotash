@@ -1,5 +1,6 @@
 
 const Publication = require('../data/db').Publication;
+const reviewService = require('./reviewService');
 const Loan = require('../data/db').Loan;
 const mongoose = require('mongoose');
 
@@ -49,8 +50,9 @@ const getAllPublications = async (cb, errorCb) => {
 
 const getPublicationsById = async (pub_id, cb, errorCb) => {
     // find publication with matching id
-    await Publication.find({"_id" : pub_id}, function(err, publication) {
+    await Publication.find({_id : pub_id}, function(err, publication) {
         if (err) { errorCb(err); }
+        else if(publication == null) { errorCb("no publication");}
         else {
             // if there is a rating
             if(publication[0].rating_count > 0) {
@@ -141,7 +143,7 @@ function addLoan(loan, auth, successCb, errorCb) {
         });
     }
     else {
-        errorCb();
+        errorCb("access denied");
     }
 };
 

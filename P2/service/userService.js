@@ -1,6 +1,7 @@
 const Users = require('../data/db').User;
 const Loan = require('../data/db').Loan;
 const publicationService = require('./publicationService');
+const reviewService = require('./reviewService');
 
 const userService = () => {
 // GET
@@ -28,8 +29,10 @@ const userService = () => {
                 // find all publications mathcing publication ids
                 var publication_list = [];
                 for(i = 0; i < loan.length; i++) {
-                    publication = await publicationService.getPublicationsById(loan[i].publicationId);
-                    publication_list.push(publication);
+                    // get publication
+                    publication = await publicationService.getPublicationsById(loan[i].publicationId, function(found) {
+                        publication_list.push(found);
+                    }, function(err) { errorCb(err); });
                 }
                 cb(publication_list);
             }
@@ -46,7 +49,7 @@ const userService = () => {
     };
 
 // DELETE
-    const deleteUser = (userId, cb, errorCb) => {
+    const deleteUser = async (userId, cb, errorCb) => {
         // delete user with matching id
         Users.deleteOne( {"_id" : userId}, function(err, result) {
             if (err) { errorCb(err); }
