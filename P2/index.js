@@ -231,10 +231,10 @@ app.post('/users/:user_id/reviews/:publication_id', function(req, res)
 
 app.put("/users/:user_id/reviews/:publication_id", function(req, res)
 {
-    const publication_id = req.params.publication_id;
-    const body = req.body;
+    const pub_id = req.params.publication_id;
+    const user_id = req.params.user_id;
 
-    reviewService.updatePublicationReview(body, publication_id, function() {
+    reviewService.updateReview(req.body, user_id, pub_id, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);
@@ -244,9 +244,9 @@ app.put("/users/:user_id/reviews/:publication_id", function(req, res)
 app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
 {
     const user_id = req.params.user_id;
-    const body = req.body;
-
-    reviewService.updateUserReview(body, user_id, function() {
+    const pub_id = req.params.publication_id;
+    
+    reviewService.updateReview(req.body, user_id, pub_id, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);
@@ -255,10 +255,10 @@ app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
 
 // ---------- DELETE ----------
 
- app.delete("/users/:user_id/reviews/:publication_id", function(req, res) {
+ app.delete("/users/:user_id/reviews/:publication_id", async function(req, res) {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
-    reviewService.deletePublicationReview(user_id, publication_id, function() {
+    reviewService.deleteReview(user_id, publication_id, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);
@@ -268,7 +268,7 @@ app.put("/Publications/:publication_id/reviews/user_id", function(req, res)
  app.delete("/Publications/:publication_id/reviews/user_id", function(req, res) {
     const user_id = req.params.user_id;
     const publication_id = req.params.publication_id;
-    reviewService.deleteUserReview(publication_id, user_id, function() {
+    reviewService.deleteReview(user_id, publication_id, function() {
         return res.status(204).send();
     }, function(err) {
         return res.status(400).json(err);
