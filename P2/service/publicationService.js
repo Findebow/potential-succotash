@@ -90,10 +90,14 @@ const getPublicationsById = async (pub_id, cb, errorCb) => {
 function addPublication(publication, auth, successCb, errorCb) {
     // check if user is authorized
     if (auth == "admin") {
+      
         // create new publication
-        publication._id = new mongoose.Types.ObjectId();
         publication.total_rating = 0;
         publication.rating_count = 0;
+        if (publication._id == undefined) {
+            publication._id = new mongoose.Types.ObjectId();
+        }
+
         Publication.create(publication, function (err, result) {
             if (err) { errorCb(err); } 
             else { successCb(result); }
